@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Fee Manager</title>
+    <style> body { font-family: sans-serif; padding: 20px; } .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; } </style>
+</head>
+<body>
+    <h1>Student Exam Fee System</h1>
+
+    <div class="box">
+        <h3>1. Add Student</h3>
+        <form action="/student" method="POST">
+            <input type="text" name="student_name" placeholder="Student Name" required><br><br>
+            <input type="text" name="usn" placeholder="USN" required><br><br>
+            <input type="number" name="semester" placeholder="Semester" required><br><br>
+            <input type="number" name="exam_fee" placeholder="Exam Fee (Enter 0 to test delete)" required><br><br>
+            <button type="submit">Save Student</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h3>2. Manage Data</h3>
+        <button onclick="viewStudents()">View All Students</button>
+        <button onclick="deleteUnpaid()">Delete Unpaid (Fee=0)</button>
+        
+        <div id="output" style="margin-top: 10px; background: #f9f9f9; padding: 10px;"></div>
+    </div>
+
+    <script>
+        // Helper: Fetch and display data
+        async function viewStudents() {
+            const res = await fetch('/students');
+            const data = await res.json();
+            
+            let html = "<ul>";
+            if(data.length === 0) html += "<li>No students found.</li>";
+            data.forEach(s => {
+                html += `<li><b>${s.student_name}</b> (Fee: ${s.exam_fee})</li>`;
+            });
+            html += "</ul>";
+            document.getElementById('output').innerHTML = html;
+        }
+
+        // Action: Delete Unpaid
+        async function deleteUnpaid() {
+            await fetch('/students/unpaid', { method: 'DELETE' });
+            alert("Deletion Complete!");
+            viewStudents(); // Refresh list to show they are gone
+        }
+    </script>
+</body>
+</html>

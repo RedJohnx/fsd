@@ -1,0 +1,21 @@
+<html>
+<body>
+    <form onsubmit="validate(event)">
+        Age: <input type="number" id="age">
+        Weight: <input type="number" id="weight">
+        <button>Submit</button>
+    </form>
+
+    <script>
+        function validate(e) {
+            e.preventDefault(); // Stop reload
+            let age = document.getElementById('age').value;
+            let w = document.getElementById('weight').value;
+
+            if(age <= 17) alert("Age must be > 17");
+            else if(w < 45 || w > 75) alert("Weight must be 45-75");
+            else alert("Success!");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Manager</title>
+    <style> body { font-family: sans-serif; padding: 20px; } .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; } </style>
+</head>
+<body>
+    <h1>Hospital Management System</h1>
+
+    <div class="box">
+        <h3>1. Add Hospital</h3>
+        <form action="/hospital" method="POST">
+            <input type="text" name="hospital_id" placeholder="Hospital ID" required><br><br>
+            <input type="text" name="name" placeholder="Name" required><br><br>
+            <input type="text" name="location" placeholder="Location" required><br><br>
+            <input type="number" name="total_beds" placeholder="Total Beds" required><br><br>
+            <input type="number" name="occupied_beds" placeholder="Occupied Beds" required><br><br>
+            <button type="submit">Save Hospital</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h3>2. Manage Beds</h3>
+        <button onclick="getCritical()">Show Critical Hospitals (Low Beds)</button>
+        
+        <div id="output" style="margin-top: 10px; background: #f9f9f9; padding: 10px;"></div>
+        
+        <hr>
+        
+        <input type="text" id="hospId" placeholder="Enter Hospital ID">
+        <button onclick="admitPatient()">Admit Patient</button>
+    </div>
+
+    <script>
+        // GET: Fetch Critical Hospitals
+        async function getCritical() {
+            const res = await fetch('/hospitals/critical');
+            const data = await res.json();
+            
+            let html = "<ul>";
+            if(data.length === 0) html += "<li>No critical hospitals found.</li>";
+            data.forEach(h => {
+                let available = h.total_beds - h.occupied_beds;
+                html += `<li><b>${h.name}</b> (Available: ${available})</li>`;
+            });
+            html += "</ul>";
+            document.getElementById('output').innerHTML = html;
+        }
+
+        // POST: Admit Patient
+        async function admitPatient() {
+            const id = document.getElementById('hospId').value;
+            if(!id) return alert("Enter Hospital ID!");
+
+            // Note: This route is POST as per requirements
+            await fetch('/hospital/' + id + '/admit', { method: 'POST' });
+            alert("Patient Admitted!");
+            getCritical(); // Refresh list to see if beds dropped
+        }
+    </script>
+</body>
+</html>

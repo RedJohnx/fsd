@@ -1,0 +1,21 @@
+<html>
+<body>
+    Month No: <input type="text" id="in">
+    Result: <input type="text" id="monthName" readonly>
+    <button onclick="convert()">Convert</button>
+
+    <script>
+        function convert() {
+            let num = document.getElementById('in').value;
+            let resField = document.getElementById('monthName');
+            
+            // Your Logic Here
+            if(num < 1 || num > 12) resField.value = "Bad Number";
+            else {
+                let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                resField.value = months[Math.floor(num)-1];
+            }
+        }
+    </script>
+</body>
+</html>

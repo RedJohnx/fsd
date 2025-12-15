@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <script>
+        // --- PASTE YOUR JS FUNCTION HERE ---
+        
+        // Example for Q1 (Translate):
+        function translate(text) {
+            let result = "";
+            const vowels = "aeiouAEIOU ";
+            
+            for (let char of text) {
+                if (vowels.includes(char) || !isNaN(char)) {
+                    result += char;
+                } else {
+                    result += char + "o" + char;
+                }
+            }
+            return result;
+        }        
+        // INPUT & OUTPUT
+        let input = prompt("Enter text:"); // Ask user
+        let result = translate(input);     // Run function
+        document.write("Result: " + result); // Show on screen
+    </script>
+</body>
+</html>

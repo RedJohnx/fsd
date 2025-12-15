@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaint Management</title>
+    <style> body { font-family: sans-serif; padding: 20px; } .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; } </style>
+</head>
+<body>
+    <h1>Complaint System</h1>
+
+    <div class="box">
+        <h3>1. Submit New Complaint</h3>
+        <form action="/complaint" method="POST">
+            <input type="text" name="complaint_id" placeholder="Complaint ID" required><br><br>
+            <input type="text" name="user_name" placeholder="User Name" required><br><br>
+            <input type="text" name="issue" placeholder="Issue Description" required><br><br>
+            <button type="submit">Submit Complaint</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h3>2. Manage Complaints</h3>
+        <button onclick="getPending()">Show Pending Complaints</button>
+        
+        <div id="output" style="margin-top: 10px; background: #f9f9f9; padding: 10px;"></div>
+        
+        <hr>
+        
+        <input type="text" id="updateId" placeholder="Enter Complaint ID to Resolve">
+        <button onclick="markResolved()">Mark as Resolved (PUT)</button>
+    </div>
+
+    <script>
+        // GET: Fetch Pending Complaints
+        async function getPending() {
+            const res = await fetch('/complaints/pending');
+            const data = await res.json();
+            
+            // formatting output nicely
+            let html = "<ul>";
+            data.forEach(item => {
+                html += `<li><b>ID:</b> ${item.complaint_id} | <b>Issue:</b> ${item.issue} | <b>Status:</b> ${item.status}</li>`;
+            });
+            html += "</ul>";
+            
+            document.getElementById('output').innerHTML = html || "No pending complaints.";
+        }
+
+        // PUT: Update Status
+        async function markResolved() {
+            const id = document.getElementById('updateId').value;
+            if(!id) return alert("Enter an ID!");
+
+            await fetch('/complaint/' + id, { method: 'PUT' });
+            alert("Complaint Resolved!");
+            getPending(); // Refresh list automatically
+        }
+    </script>
+</body>
+</html>

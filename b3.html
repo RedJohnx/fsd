@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Internship Tracker</title>
+    <style> body { font-family: sans-serif; padding: 20px; } .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; } </style>
+</head>
+<body>
+    <h1>Internship Tracking System</h1>
+
+    <div class="box">
+        <h3>1. Add Internship Details</h3>
+        <form action="/internship" method="POST">
+            <input type="text" name="student_id" placeholder="Student ID" required><br><br>
+            <input type="text" name="name" placeholder="Student Name" required><br><br>
+            <input type="text" name="company" placeholder="Company (e.g., Infosys)" required><br><br>
+            <input type="text" name="duration" placeholder="Duration" required><br><br>
+            <button type="submit">Save Details</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h3>2. Manage Interns</h3>
+        <button onclick="getInfosys()">Show "Infosys" Interns</button>
+        
+        <div id="output" style="margin-top: 10px; background: #f9f9f9; padding: 10px;"></div>
+        
+        <hr>
+        
+        <input type="text" id="targetId" placeholder="Enter Student ID">
+        <button onclick="markCompleted()">Mark as Completed (PUT)</button>
+    </div>
+
+    <script>
+        // GET: Fetch only Infosys interns
+        async function getInfosys() {
+            const res = await fetch('/internships/infosys');
+            const data = await res.json();
+            
+            let html = "<ul>";
+            if(data.length === 0) html += "<li>No Infosys interns found.</li>";
+            data.forEach(item => {
+                html += `<li><b>ID:</b> ${item.student_id} | <b>Name:</b> ${item.name} | <b>Status:</b> ${item.status}</li>`;
+            });
+            html += "</ul>";
+            document.getElementById('output').innerHTML = html;
+        }
+
+        // PUT: Update status
+        async function markCompleted() {
+            const id = document.getElementById('targetId').value;
+            if(!id) return alert("Enter Student ID!");
+
+            await fetch('/internship/' + id, { method: 'PUT' });
+            alert("Updated Status to Completed!");
+            getInfosys(); // Refresh list to see change
+        }
+    </script>
+</body>
+</html>
