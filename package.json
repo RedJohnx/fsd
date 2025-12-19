@@ -1,1 +1,1 @@
-{"name":"fsd-project","scripts":{"start":"node 6.js"},"dependencies":{"express":"^5.2.1","mongodb":"^7.0.0","mongoose":"^9.0.1"}}
+{"name":"fsd-project","scripts":{"start":"node 5.js"},"dependencies":{"express":"^5.2.1","mongodb":"^7.0.0","mongoose":"^9.0.1"}}
